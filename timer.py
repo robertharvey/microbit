@@ -13,7 +13,6 @@ STATE_UPDATE = 2
 STATE_FINISHED = 3
 
 state = STATE_STOPPED
-old_state = STATE_STOPPED
 
 start_time = 0
 last_time = 0
@@ -72,7 +71,7 @@ while True:
         last_time = running_time()
         state = STATE_UPDATE
     
-    elif state == STATE_FINISHED and running_time() > last_time + FINAL_DISPLAY_TIME:
+    if state == STATE_FINISHED and running_time() > last_time + FINAL_DISPLAY_TIME:
         last_time = running_time()
         display.clear()
         state = STATE_STOPPED
