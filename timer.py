@@ -1,6 +1,7 @@
 # 60 second timer for playing games like Articulate
 
 from microbit import *
+import music
 
 MAX_TIME = 60
 
@@ -56,6 +57,7 @@ while True:
     
     # Start timer
     if button_a.was_pressed():
+        music.pitch(2000,100)
         state = STATE_UPDATE
         start_time = last_time = running_time()
         clock = 0
@@ -71,16 +73,20 @@ while True:
         last_time = running_time()
         state = STATE_UPDATE
     
-    if state == STATE_FINISHED and running_time() > last_time + FINAL_DISPLAY_TIME:
-        last_time = running_time()
-        display.clear()
-        state = STATE_STOPPED
+    if state == STATE_FINISHED:
+        if running_time() > last_time + FINAL_DISPLAY_TIME:
+            last_time = running_time()
+            display.clear()
+            state = STATE_STOPPED
+        else:
+            display.show(finished, delay=400, wait=False)
+            music.pitch(2000,200)
+            sleep(1000)
         
     if state == STATE_UPDATE:
         display_time = int(MAX_TIME-(last_time-start_time)/1000)
         if display_time <= 0:
             state = STATE_FINISHED
-            display.show(finished, delay=400, wait=False, loop=True)
         else:
             state = STATE_RUNNING
             if (display_time != last_display_time and display_time > 10 and display_time % 10 == 0) or display_time < 10:
